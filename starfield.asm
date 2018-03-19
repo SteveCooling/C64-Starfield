@@ -6,7 +6,7 @@
 // Functions for calculating vic values and other stuff
 // (normally we would put these in a library)
 
-.var music = LoadSid("Girl_in_Town.sid")
+//.var music = LoadSid("music.sid")
 
 .function screenToD018(addr) {										// <- This is how we define a function
 	.return ((addr&$3fff)/$400)<<4
@@ -199,13 +199,13 @@ newY:
 			clc
 			jmp !loop-
 
-
+/*
 irq1:  	    asl $d019
 			inc $d020
 			jsr music.play 									// <- Here we get the play address from the sid file
 			dec $d020
 			jmp $ea81
-
+*/
 
 initSprites: {
 
