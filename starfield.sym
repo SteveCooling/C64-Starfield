@@ -1,9 +1,9 @@
-.label spritePtrs=$2235
+.label spritePtrs=$2446
 .label charset=$2800
-.label spriteSpeed=$223d
-.label start=$2000
+.label spriteSpeed=$244e
+.label start=$2200
 .label screen=$3c00
-.label newY=$20b1 {
+.label newY=$22b3 {
 }
 .label sprite4=$2900 {
 }
@@ -11,8 +11,9 @@
 }
 .label sprite2=$2880 {
 }
-.label initSprites=$20e4 {
+.label initSprites=$22f5 {
 }
 .label sprite1=$2840 {
 }
-.label sinus=$2245
+.label sinus=$2456
+.label irq1=$22e6
