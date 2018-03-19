@@ -9,6 +9,8 @@ Uses GraphicsMagick/ImageMagick and KickAssembler to create a simple starfield s
 
 The star speed also determines the size of the star that is used. Faster stars are closer and therefore bigger and vice versa.
 
+The program is derived from one of the examples shipped with KickAssembler
+
 TODO
 ----
 
