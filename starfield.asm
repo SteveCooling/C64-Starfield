@@ -1,12 +1,12 @@
 :BasicUpstart2(start)
 
 
-.var debug = true
+.var debug = false
 //--------------------------------------------
 // Functions for calculating vic values and other stuff
 // (normally we would put these in a library)
 
-//.var music = LoadSid("Girl_in_Town.sid")
+.var music = LoadSid("Girl_in_Town.sid")
 
 .function screenToD018(addr) {										// <- This is how we define a function
 	.return ((addr&$3fff)/$400)<<4
@@ -66,7 +66,7 @@
 }
 
 //--------------------------------------------
-			*=$2000 "Program"
+			*=$2200 "Program"
 start: 		sei
 			
 			SetBorderColor(BLACK)
@@ -91,7 +91,26 @@ start: 		sei
 			lda #toD018(screen, charset)	// <- The d018 value is calculated by a function. You can move graphics around and not worry about d018 is properly set
 			sta $d018							
 			
-			/*
+			
+
+
+
+			// Setup some sprites
+			lda #$ff	// All sprites enabled
+			:setSpriteEnable()
+			ldx #7
+!loop:		lda spritePtrs,x
+			sta screen+$3f8,x
+			//txa
+			//lsr
+			lda #$01		// white
+			sta $d027,x 	// sprite color
+			dex
+			bpl !loop-
+			
+			jsr initSprites
+
+		/*	
 			// music time (i think)
 			ldx #0
 			ldy #0
@@ -115,40 +134,26 @@ start: 		sei
 			lda $dd0d
 			asl $d019
 			cli
-			jmp *
+			//jmp *
+
 
 
 			*=music.location "Music"
 			.fill music.size, music.getData(i)				// <- Here we put the music in memory
+			*/
 
-*/
-			// Setup some sprites
-			lda #$ff	// All sprites enabled
-			:setSpriteEnable()
-			ldx #7
-!loop:		lda spritePtrs,x
-			sta screen+$3f8,x
-			//txa
-			//lsr
-			lda #$01		// white
-			sta $d027,x 	// sprite color
-			dex
-			bpl !loop-
-			
-			jsr initSprites
-
-			
 			// Make an effect loop with nonsense sprite movement
 			ldx #0
 			ldy #$0
 
 !loop:		.if(debug) SetBorderColor(BLACK)
+			cli
 !frame: 	lda $d012		// Wait for frame. 
 							// There should be free time here to do music.
 			cmp #$ff		// If the raster line is not yet 256
 			bne !frame-		// Jump UP to the nearest "loop" label
 			.if(debug) SetBorderColor(RED)
-
+			sei
 
 !mvX:		// Unrolled x position "loop"
 
@@ -194,13 +199,13 @@ newY:
 			clc
 			jmp !loop-
 
-/*
+
 irq1:  	    asl $d019
 			inc $d020
 			jsr music.play 									// <- Here we get the play address from the sid file
 			dec $d020
 			jmp $ea81
-*/
+
 
 initSprites: {
 
@@ -336,7 +341,7 @@ sprite4:	LoadSpriteFromGif("star4.gif")
 
 
 //--------------------------------------------
-			//* = $3c00 "Virtual data" virtual		// <- Data in a virtual block is not entered into memory 
+			* = $3c00 "Virtual data" virtual		// <- Data in a virtual block is not entered into memory 
 screen: 	.fill $0400, 0
 			
 	
